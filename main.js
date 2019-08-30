@@ -45,7 +45,7 @@ const changeValue = (ev ,count = 0)=> {
     const maxValue = document.getElementById('max').value;
     document.getElementById('max_value').textContent = maxValue;
     document.getElementById('min_value').textContent = minValue;
-    currentItemList = itemList.filter(({price}) => {
+    currentItemList = currentItemList.filter(({price}) => {
         return  +price > +minValue && +price < +maxValue});
     drawList(currentItemList, count);
 };
