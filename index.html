@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TreoLabs Test</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header">
+        <div class="auth" id="auth">
+            <div id="auth_off">
+                <div>
+                    <label for="login">Login</label>
+                    <input type="text" id="login">
+                </div>
+
+                <div>
+                    <label for="pass">Password</label>
+                    <input type="password" id="pass">
+                </div>
+                <p hidden id="wrong_auth" >Wrong Login/password</p>
+                <input id="submit" type="button" onclick="logIn()" value="Log in">
+            </div>
+
+            <div id="auth_in" hidden>
+                <p class="welcome" id="welcome">Welcome !</p>
+                <button class="exit_button" onclick="logOut()">Exit</button>
+            </div>
+        </div>
+    </header>
+    <script src="main.js"></script>
+</body>
+</html>
