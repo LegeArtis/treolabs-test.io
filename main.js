@@ -1,17 +1,6 @@
 let user;
 let currentItemList;
 
-window.onload = ()=> {
-    user = userList[0];
-    searchBlock();
-    createBasket();
-    authToggle();
-    currentItemList = itemList;
-    sort();
-
-};
-
-
 const changeValue = (ev ,count = 0)=> {
     const minValue = document.getElementById('min').value;
     const maxValue = document.getElementById('max').value;
@@ -472,8 +461,10 @@ const logIn = ()=> {
 const logOut = ()=> {
     user = null;
     const list = document.getElementById('list_div');
+    const history = document.getElementById('history_div');
     const basket = document.getElementById('basket_block');
     const searchBlock = document.getElementById('search_block');
+    document.body.removeChild(history);
     document.body.removeChild(list);
     document.getElementById('header').removeChild(basket);
     document.getElementById('header').removeChild(searchBlock);
