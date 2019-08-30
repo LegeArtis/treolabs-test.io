@@ -1,22 +1,56 @@
 let user;
 let currentItemList;
+let currentPag;
+
+const logIn = ()=> {
+    const login = document.getElementById('login');
+    const pass = document.getElementById('pass');
+    user = searchUser(login.value, pass.value);
+    if (user) {
+        currentItemList = itemList;
+        searchBlock();
+        sort();
+        createHistory();
+        authToggle();
+        document.getElementById('wrong_auth').hidden = true;
+        document.getElementById('welcome').textContent = `Welcome, ${user.userName}!`;
+        login.value = '';
+        pass.value = '';
+        createBasket();
+    } else {
+        document.getElementById('wrong_auth').hidden = false;
+    }
+};
+
+const logOut = ()=> {
+    user = null;
+    const list = document.getElementById('list_div');
+    const history = document.getElementById('history_div');
+    const basket = document.getElementById('basket_block');
+    const searchBlock = document.getElementById('search_block');
+    document.body.removeChild(history);
+    document.body.removeChild(list);
+    document.getElementById('header').removeChild(basket);
+    document.getElementById('header').removeChild(searchBlock);
+    authToggle();
+};
 
 const changeValue = (ev ,count = 0)=> {
     const minValue = document.getElementById('min').value;
     const maxValue = document.getElementById('max').value;
     document.getElementById('max_value').textContent = maxValue;
     document.getElementById('min_value').textContent = minValue;
-    const searchList = currentItemList.filter(({price}) => {
+    currentItemList = itemList.filter(({price}) => {
         return  +price > +minValue && +price < +maxValue});
-    drawList(searchList, count);
+    drawList(currentItemList, count);
 };
 
 const sort = (e = {target : {value: 'title'}})=> {
     let sortedList;
     if (e.target.value === 'price') {
-        sortedList = currentItemList.sort((a, b)=> a.price - b.price);
+        sortedList = itemList.sort((a, b)=> a.price - b.price);
     } else {
-        sortedList = currentItemList.sort((a, b) => {
+        sortedList = itemList.sort((a, b) => {
             const aTitle = a.title.toLowerCase();
             const bTitle = b.title.toLowerCase();
             if (aTitle < bTitle) {
@@ -65,11 +99,12 @@ const titleOnClick = ({target: {id}})=> {
     h1.textContent = title;
     p.textContent = description;
     buttonBuy.textContent = `Buy ${price}UAH`;
-    buttonBuy.addEventListener('click', clickBuy, false)
+    buttonBuy.addEventListener('click', clickBuy, false);
+    buttonBuy.addEventListener('click', ()=> document.body.removeChild(inform), false);
     buttonBuy.id = id;
     buttonExit.textContent = 'x';
     buttonExit.id = 'inform_exit';
-    buttonExit.addEventListener('click', ()=> document.body.removeChild(inform));
+    buttonExit.addEventListener('click', ()=> document.body.removeChild(inform), false);
 
 
     inform.className = 'inform';
@@ -90,7 +125,10 @@ const createPagination = (count, activePag)=> {
 
     for (let i = 0; i < count; i++) {
         const pagElem = document.createElement('button');
-        i === +activePag ? pagElem.className = 'active_pagination' : '';
+        if (i === +activePag) {
+            pagElem.className = 'active_pagination';
+            currentPag = i;
+        }
         pagElem.textContent = `${i+1}`;
         pagElem.id = `${i}`;
         pagElem.addEventListener('click', goTo, false);
@@ -105,6 +143,7 @@ const createPagination = (count, activePag)=> {
     prev.textContent = '<<';
     prev.addEventListener('click', goToPrev, false);
     next.textContent = '>>';
+    next.addEventListener('click', goToNext, false);
 
     pagDiv.appendChild(prev);
     pagDiv.appendChild(listOfLink);
@@ -115,10 +154,16 @@ const createPagination = (count, activePag)=> {
 
 
 const goToPrev = ()=> {
-    const currentElement = document.getElementById('list').firstChild.firstChild;
-    console.log(currentElement.id);
-    if (currentElement.id > 0) {
-        changeValue(null, currentElement.id - 1);
+
+    if (currentPag > 0) {
+        changeValue(null, currentPag - 1);
+    }
+};
+
+const goToNext = ()=> {
+    console.log(currentPag);
+    if (currentPag < currentItemList.length - 1) {
+        changeValue(null, currentPag + 1);
     }
 };
 
@@ -438,38 +483,7 @@ const refreshHistory = ()=> {
     historyDiv.appendChild(ul);
 };
 
-const logIn = ()=> {
-    const login = document.getElementById('login');
-    const pass = document.getElementById('pass');
-    user = searchUser(login.value, pass.value);
-    if (user) {
-        currentItemList = itemList;
-        searchBlock();
-        sort();
-        createHistory();
-        authToggle();
-        document.getElementById('wrong_auth').hidden = true;
-        document.getElementById('welcome').textContent = `Welcome, ${user.userName}!`;
-        login.value = '';
-        pass.value = '';
-        createBasket();
-    } else {
-        document.getElementById('wrong_auth').hidden = false;
-    }
-};
 
-const logOut = ()=> {
-    user = null;
-    const list = document.getElementById('list_div');
-    const history = document.getElementById('history_div');
-    const basket = document.getElementById('basket_block');
-    const searchBlock = document.getElementById('search_block');
-    document.body.removeChild(history);
-    document.body.removeChild(list);
-    document.getElementById('header').removeChild(basket);
-    document.getElementById('header').removeChild(searchBlock);
-    authToggle();
-};
 
 
 const authToggle = ()=> {
@@ -480,7 +494,9 @@ const authToggle = ()=> {
 };
 
 
-//Back-End
+/*
+Back-End
+ */
 const userList = [
     {
         id : 0,
