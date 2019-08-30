@@ -324,6 +324,14 @@ li {
     margin-top: 15px;
 }
 
+#login {
+    width: 50%;
+}
+
+#pass {
+    width: 50%;
+}
+
 .auth label {
     display: inline-block;
     font-size: 20px;
