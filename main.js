@@ -97,7 +97,12 @@ const titleOnClick = ({target: {id}})=> {
     const buttonBuy = document.createElement('button');
     const buttonExit = document.createElement('p');
 
-    user.itemHistory.push({...item, date: Date.now()});
+    const index = user.itemHistory.findIndex(({id}) => id === item.id);
+    if (index >= 0) {
+        user.itemHistory[index].date = Date.now();
+    } else {
+        user.itemHistory.push({...item, date: Date.now()});
+    }
     refreshHistory();
 
     img.src = image;
@@ -381,35 +386,6 @@ const searchBlock = ()=> {
     const searchDiv = document.createElement('div');
     const firstSearchPart = firstSearchBlock();
     const secondSearchPart = secondSearchBlock();
-    // const search = document.createElement('input');
-    // const labelForSelect = document.createElement('label');
-    // const select = document.createElement('select');
-    // const optionByName = document.createElement('option');
-    // const optionByPrice = document.createElement('option');
-    // const labelForMin = document.createElement('label');
-    // const labelForMan = document.createElement('label');
-    // const inputMin = document.createElement('input');
-    // const inputMan = document.createElement('input');
-    // const p = document.createElement('p');
-    // const spanMinValue = document.createElement('span');
-    // const spanMaxValue = document.createElement('span');
-    // searchDiv.id = 'search_block';
-    // firstSearchPart.className = 'search_part';
-    // search.id = 'search';
-    // search.placeholder = 'search';
-    // search.type = 'text';
-    // labelForSelect.textContent = 'Sort by';
-    // labelForSelect.htmlFor = 'select';
-    // select.id = 'select';
-    // select.addEventListener('onchange', sort, false);
-    // optionByName.textContent = 'title';
-    // optionByPrice.textContent = 'name';
-    // select.appendChild(optionByName);
-    // select.appendChild(optionByPrice);
-    //
-    // firstSearchPart.appendChild(search);
-    // firstSearchPart.appendChild(labelForSelect);
-    // secondSearchPart.className = 'search_part';
 
     searchDiv.id = 'search_block';
     searchDiv.appendChild(firstSearchPart);
@@ -427,29 +403,6 @@ const createHistory = ()=> {
       historyDiv.id = 'history_div';
       document.body.appendChild(historyDiv);
       refreshHistory();
-};
-
-Date.prototype.toShortFormat = function() {
-
-    const month_names =["Jan","Feb","Mar",
-        "Apr","May","Jun",
-        "Jul","Aug","Sep",
-        "Oct","Nov","Dec"];
-
-    const day = this.getDate();
-    const month_index = this.getMonth();
-    const year = this.getFullYear();
-    const hours = this.getHours();
-    let minutes = this.getMinutes();
-    let seconds = this.getSeconds();
-    if (seconds < 10) {
-        seconds = '0' + seconds;
-    }
-    if (minutes < 10) {
-        minutes = `0${minutes}`;
-    }
-
-    return `${day}-${month_names[month_index]}-${year} ${hours}:${minutes}:${seconds}`;
 };
 
 const refreshHistory = ()=> {
@@ -474,9 +427,6 @@ const refreshHistory = ()=> {
         const date = new Date(currentValue.date);
         dateP.textContent = date.toShortFormat();
 
-        console.log(date.getHours());
-
-
         li.appendChild(p);
         li.appendChild(dateP);
 
@@ -487,8 +437,28 @@ const refreshHistory = ()=> {
     historyDiv.appendChild(ul);
 };
 
+Date.prototype.toShortFormat = function() {
 
+    const month_names =["Jan","Feb","Mar",
+        "Apr","May","Jun",
+        "Jul","Aug","Sep",
+        "Oct","Nov","Dec"];
 
+    const day = this.getDate();
+    const month_index = this.getMonth();
+    const year = this.getFullYear();
+    const hours = this.getHours();
+    let minutes = this.getMinutes();
+    let seconds = this.getSeconds();
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+    if (minutes < 10) {
+        minutes = `0${minutes}`;
+    }
+
+    return `${day}-${month_names[month_index]}-${year} ${hours}:${minutes}:${seconds}`;
+};
 
 const authToggle = ()=> {
     const authOff = document.getElementById('auth_off');
