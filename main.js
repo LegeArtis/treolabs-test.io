@@ -2,8 +2,12 @@ let user;
 let currentItemList;
 let currentPag;
 
+window.onload = ()=> {
+  document.getElementById('auth_off').addEventListener('submit', logIn, false);
+};
 
-const logIn = ()=> {
+const logIn = (e)=> {
+    e.preventDefault();
     const login = document.getElementById('login');
     const pass = document.getElementById('pass');
     user = searchUser(login.value, pass.value);
@@ -162,7 +166,6 @@ const goToPrev = ()=> {
 };
 
 const goToNext = ()=> {
-    console.log(currentPag);
     if (currentPag < currentItemList.length - 1) {
         changeValue(null, currentPag + 1);
     }
