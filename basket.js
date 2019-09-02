@@ -1,8 +1,41 @@
-const deleteFromBasket = ({target: {id}})=> {
-    const index = user.basket.findIndex((item)=> item.id === +id);
+const deleteFromBasket = ({target: {key}})=> {
+    const index = user.basket.findIndex((item)=> item.id === +key);
     console.log(index);
     user.basket.splice(index, 1);
+    cancelDeleteFromBasket();
     refreshBasket();
+};
+
+const cancelDeleteFromBasket = ()=> {
+    const confirmBlock = document.getElementById('confirm_block');
+    document.body.removeChild(confirmBlock);
+};
+
+const confirmDeleteFromBasket = ({target: {key}})=> {
+    const confirmBlock = document.createElement('div');
+    const confirmWindow = document.createElement('div');
+    const p = document.createElement('p');
+    const buttonYes = document.createElement('button');
+    const buttonNo = document.createElement('button');
+    const itemToDelete = user.basket.find((item)=> item.id === +key);
+
+    confirmBlock.id = 'confirm_block';
+    confirmWindow.id = 'confirm_window';
+    p.textContent = `Are you sure to delete ${itemToDelete.title}?`;
+    buttonYes.textContent = 'Yes';
+    buttonYes.key = key;
+    buttonYes.addEventListener('click', deleteFromBasket, false);
+    buttonYes.id = 'confirm_yes';
+    buttonNo.id = 'confirm_no';
+    buttonNo.textContent = 'No';
+    buttonNo.addEventListener('click', cancelDeleteFromBasket, false);
+
+    confirmWindow.appendChild(p);
+    confirmWindow.appendChild(buttonYes);
+    confirmWindow.appendChild(buttonNo);
+    confirmBlock.appendChild(confirmWindow);
+
+    document.body.appendChild(confirmBlock);
 };
 
 const refreshBasket = ()=> {
@@ -29,8 +62,8 @@ const refreshBasket = ()=> {
         titleItem.addEventListener('click', titleOnClick, false);
         countItem.className = 'basket_item_count';
         countItem.textContent = count;
-        deleteItem.id = id;
-        deleteItem.addEventListener('click', deleteFromBasket, false);
+        deleteItem.key = id;
+        deleteItem.addEventListener('click', confirmDeleteFromBasket, false);
         deleteItem.textContent = 'X';
         deleteItem.className = 'basket_item_delete pointer_cursor';
 

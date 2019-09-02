@@ -2,10 +2,6 @@ let user;
 let currentItemList;
 let currentPag;
 
-window.onload = ()=> {
-  document.getElementById('auth_off').addEventListener('submit', logIn, false);
-};
-
 const logIn = (e)=> {
     e.preventDefault();
     const login = document.getElementById('login');

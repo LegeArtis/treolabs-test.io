@@ -2,6 +2,46 @@ body {
     display: grid;
     grid-template-columns: 3fr 2fr;
     grid-template-rows: 175px 600px;
+    margin: 0;
+}
+
+#confirm_block {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#confirm_window {
+    position: absolute;
+    width: 500px;
+    height: 250px;
+    color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 22px;
+}
+
+#confirm_yes {
+    position: absolute;
+    left: 15%;
+    top: 60%;
+    width: 125px;
+    height: 50px;
+    background-color: #dad9b4;
+    font-size: 25px;
+}
+
+#confirm_no {
+    position: absolute;
+    right: 15%;
+    top: 60%;
+    width: 125px;
+    height: 50px;
+    background-color: #dad9b4;
+    font-size: 25px;
 }
 
 .history_title {
